@@ -56,7 +56,7 @@ Existem duas formas de executar o aplicativo:
 | **G**      |   3 |   1 |   2 |   0 |   1 |   1 |   0 |   2 |   3 |    0.127098 |    0.123696 | 0.493218 |   **5** |
 | **H**      |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    0.202785 |         0.0 |      0.0 |   **8** |
 
-#### Formato de saída ordenada adicionando o comando `-o, --[no-]ordenar`
+#### Formato de saída ordenada adicionando o comando *`-o, --[no-]ordenar`*
 
 | Provedores | P01 | P02 | P04 | P05 | P06 | P07 | P09 | P10 | P11 | [+]Distance | [-]Distance |    Score | Ranking |
 |:----------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:-----------:|------------:|---------:|:-------:|
@@ -69,7 +69,7 @@ Existem duas formas de executar o aplicativo:
 | **A**      |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    0.202785 |         0.0 |      0.0 |   **7** |
 | **H**      |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    0.202785 |         0.0 |      0.0 |   **8** |
 
-#### Exibir os dados normalizados adicionando o comando `-n, --[no-]normalizar`
+#### Exibir os dados normalizados adicionando o comando *`-n, --[no-]normalizar`*
 
 | Provedores | P01      | P02      | P04      | P05      | P06      | P07      | P09      | P10      | P11      |
 |:----------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
