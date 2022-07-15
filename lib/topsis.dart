@@ -4,14 +4,17 @@ import 'dart:math';
 import 'package:csv/csv.dart';
 
 class Topsis {
-  late final _RowString _headers; // Linha de cabeçalhos
-  late final _RowString _impacts; // Linha com os impactos
-  late final _RowNum _weights; // Linha com os pesos
-  late final _originalValues = <_RowNum>[]; // Tabela com os valores originais
-  late final _normalizedValues = <_RowNum>[]; // Tabela com os valores normalizados
-  late final _resultValues = <_RowNum>[]; // Tabela com os valores processados
-  late _RowNum _vMax;
-  late _RowNum _vMin;
+  late final _Row<String> _headers; // Linha de cabeçalhos
+  late final _Row<String> _impacts; // Linha com os impactos
+  late final _Row<num> _weights; // Linha com os pesos
+  // Tabela com os valores originais
+  late final _originalValues = <_Row<num>>[];
+  // Tabela com os valores normalizados
+  late final _normalizedValues = <_Row<num>>[];
+  // Tabela com os valores processados
+  late final _resultValues = <_Row<num>>[];
+  late _Row<num> _vMax;
+  late _Row<num> _vMin;
 
   // Contrutor da classe
   Topsis(String path) {
@@ -27,19 +30,20 @@ class Topsis {
     final csv = file.readAsStringSync();
     // Monta a tabela para ser processada
     _mountTable(CsvToListConverter().convert(csv));
-    _process(); // Executa o processamento dos dados
+    // Executa o processamento dos dados
+    _process();
   }
 
   void _mountTable(List<List<dynamic>> table) {
-    _headers = _RowString(
-        table[0]); // Cria uma linha com valores textuais do cabeçalho
-    _impacts = _RowString(
-        table[1]); // Cria uma linha com valores textuais dos impactos
-    _weights =
-        _RowNum(table[2]); // Cria uma linha com valores numéricos dos pesos
-    // Carrega as linhas com os dados a serem processadas
+    // Cria uma linha com valores textuais do cabeçalho
+    _headers = _Row<String>(table[0]);
+    // Cria uma linha com valores textuais dos impactos
+    _impacts = _Row<String>(table[1]);
+    // Cria uma linha com valores numéricos dos pesos
+    _weights = _Row<num>(table[2]);
+    // Carrega as linhas com as alternativas a serem processadas
     for (final element in table.skip(3)) {
-      _originalValues.add(_RowNum(element));
+      _originalValues.add(_Row<num>(element));
     }
   }
 
@@ -103,9 +107,11 @@ class Topsis {
     // Count recebe a quantidade de colunas (critérios)
     var count = _headers.values.length;
     // Cria uma tabela temporária
-    final tempTable = <_RowNum>[];
-    _vMax = _RowNum(['V+']); // Linha que armazena os valores máximos
-    _vMin = _RowNum(['V-']); // Linha que armazena os valores mínimos
+    final tempTable = <_Row<num>>[];
+    // Linha que armazena os valores máximos
+    _vMax = _Row<num>(['V+']);
+    // Linha que armazena os valores mínimos
+    _vMin = _Row<num>(['V-']);
     // Itera sobre a tabela original contendo os critérios
     for (var column = 0; column < count; column++) {
       // Extrai a coluna da tabela
@@ -136,12 +142,12 @@ class Topsis {
     count = _normalizedValues.length;
     // Itera sobre a tabela normalizada
     for (var row = 0; row < count; row++) {
-      // Calcula as distâncias euclidianas máximas, mínimas e a similaridade 
+      // Calcula a distância euclidiana máxima, mínima e a similaridade
       final temp = _euclideanDistance(_normalizedValues[row]);
       // Adiciona o resultado na tabela de valores processados
       // Obs: Mantém os dados originais e adiciona mais três colunas
       // [+]Distance | [-]Distance | Score
-      _resultValues.add(_RowNum([
+      _resultValues.add(_Row<num>([
         _originalValues[row].name,
         ..._originalValues[row].values,
         ...temp.values
@@ -153,8 +159,8 @@ class Topsis {
     _ranking(_resultValues);
   }
 
-  /// Normaliza uma coluna de acordo com o peso
-  _RowNum _normalizer(_RowNum column, num weight) {
+  /// Normaliza uma coluna (critério) de acordo com o peso
+  _Row<num> _normalizer(_Row<num> column, num weight) {
     // Armazena a raiz quadrada da somatória
     final soma = sqrt(
       // Faz a somatória de cada valor elevado ao quadrado
@@ -164,54 +170,55 @@ class Topsis {
     // pelo seu peso
     final temp = column.values.map((item) => (item / soma) * weight).toList();
     // Retorna a coluna com os seus valores normalizados
-    return _RowNum([column.name, ...temp]);
+    return _Row<num>([column.name, ...temp]);
   }
 
-  /// Estrai uma coluna da tabela e retorna uma linha de valores numéricos
-  _RowNum _extractColumn(List<_RowNum> values, int column) {
+  /// Estrai uma coluna da tabela e retorna uma linha com valores numéricos
+  _Row<num> _extractColumn(List<_Row<num>> values, int column) {
     final temp =
         values.map<double>((row) => row.values[column].toDouble()).toList();
     // Retorna uma linha de valores numéricos com o nome da coluna correspondente
-    return _RowNum([_headers.values[column], ...temp]);
+    return _Row<num>([_headers.values[column], ...temp]);
   }
 
-  /// Estrai uma coluna da tabela e retorna uma linha de valores numéricos
-  _RowNum _extractRow(List<_RowNum> values, int column) {
+  /// Estrai uma coluna da tabela e retorna uma linha com valores numéricos
+  _Row<num> _extractRow(List<_Row<num>> values, int column) {
     final temp =
         values.map<double>((row) => row.values[column].toDouble()).toList();
     // Retorna uma linha de valores numéricos com o nome da linha original correspondente
-    return _RowNum([_originalValues[column].name, ...temp]);
+    return _Row<num>([_originalValues[column].name, ...temp]);
   }
 
   /// Calcula a distância euclidiana máxima e mínima de uma linha
-  _RowNum _euclideanDistance(_RowNum row) {
-    double siMax = 0; // Valor da melhor distância 
-    double siMin = 0; // Valor da pior distância 
+  _Row<num> _euclideanDistance(_Row<num> row) {
+    double siMax = 0; // Valor da melhor distância
+    double siMin = 0; // Valor da pior distância
     final count = row.values.length; // Número de elementos da linha
     // Itera sobre os elementos da linha
     for (var i = 0; i < count; i++) {
-      // Soma o resultado da diferênça elevado ao quadrado 
-      // do valor da linha e o valor da melhor alternativa correspondente.
-      siMax += pow(row.values[i] - _vMax.values[i], 2);
-      // Soma o resultado da diferênça elevado ao quadrado 
-      // do valor da linha e o valor da pior alternativa correspondente.
-      siMin += pow(row.values[i] - _vMin.values[i], 2);
+      // Soma o resultado da diferênça elevado ao quadrado
+      // Diferença entre o valor ideal positivo e o valor normalizado
+      siMax += pow(_vMax.values[i] - row.values[i], 2);
+      // Soma o resultado da diferênça elevado ao quadrado
+      // Diferença entre o valor ideal negativo e o valor normalizado
+      siMin += pow(_vMin.values[i] - row.values[i], 2);
     }
-    // Raiz quadrada do resultado da soma da melhor distância
+    // Extrai a raiz quadrada do resultado da soma da melhor distância
     siMax = sqrt(siMax);
-    // Raiz quadrada do resultado da soma da pior distância
+    // Extrai a raiz quadrada do resultado da soma da pior distância
     siMin = sqrt(siMin);
     // Cria uma nova linha com os valores
-    final res = _RowNum([row.name, ...row.values]);
-    res.values.add(siMax); // Adiciona o valor da melhor distância 
-    res.values.add(siMin); // Adiciona o valor da pior distância 
-    res.values.add(siMin / (siMax + siMin)); // Adiciona o valor similaridade (Score)
+    final res = _Row<num>([row.name, ...row.values]);
+    res.values.add(siMax); // Adiciona o valor da melhor distância
+    res.values.add(siMin); // Adiciona o valor da pior distância
+    // Adiciona o valor calculado da proximidade relativa (Score)
+    res.values.add(siMin / (siMax + siMin));
     // Retorna a nova linha com os valores calculados
     return res;
   }
 
   /// Gera a coluna de ranking de acordo com o resultado do score
-  void _ranking(List<_RowNum> result) {
+  void _ranking(List<_Row<num>> result) {
     final temp = [...result]; // Gera uma cópia do resultado
     // Ordena a cópia dos resultados de acordo com a última coluna (score)
     temp.sort((a, b) => b.values.last.compareTo(a.values.last));
@@ -223,20 +230,12 @@ class Topsis {
   }
 }
 
-/// Classe que repesenta uma linha com valores numéricos
-class _RowNum {
-  final String name; // Nome da linha
-  final List<num> values; // Valores da linha
-  _RowNum(List item)
+/// Classe que repesenta uma linha com valores genéricos
+class _Row<T> {
+  final String name; // Nome da linha (Cabeçalho)
+  final List<T> values; // Valores da linha
+  // Contrutor
+  _Row(List item)
       : name = item[0],
-        values = item.skip(1).map<num>((value) => value).toList();
-}
-
-/// Classe que repesenta uma linha com valores textuais
-class _RowString {
-  final String name; // Nome da linha
-  final List<String> values; // Valores da linha
-  _RowString(List item)
-      : name = item[0],
-        values = item.skip(1).map<String>((value) => value).toList();
+        values = item.skip(1).map<T>((value) => value).toList();
 }
