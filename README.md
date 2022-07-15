@@ -1,6 +1,6 @@
 # Dart - TOPSIS (Technique for Order Preference by Similarity to Ideal Solution)
 
-### Programa desenvolvido em linguagem de programação [Dart](https://dart.dev/) para o trabalho de conclusão de curso de Tecnologia em Análise e Desenvolvimento de Sistemas no Instituto Federal de Educação, Ciência e Tecnologia do Pará campus Altamira.<hr>
+#### Programa desenvolvido em linguagem de programação [Dart](https://dart.dev/) para o trabalho de conclusão de curso de Tecnologia em Análise e Desenvolvimento de Sistemas no Instituto Federal de Educação, Ciência e Tecnologia do Pará campus Altamira.<hr>
 
 ## O que é TOPSIS
 É a técnica para ordenamento de preferências por semelhança com a solução ideal, surgiu na década de 1980 como um método de tomada de decisão multicritério.
@@ -26,7 +26,7 @@ A terceira linha deve conter o peso que cada critério deve receber.<br>
 As demais linhas são as alternativas a serem avaliadas.
 
 ## Como usá-lo
-> O aplicativo tem opções de linha de comando:
+#### O aplicativo tem opções de linha de comando:
 ```Shell
 Opções de comando:
 
@@ -43,7 +43,7 @@ Existem duas formas de executar o aplicativo:
 
 ## Dados de saída
 
-> Formato de saída padrão
+### Formato de saída padrão
 
 | Provedores | P01 | P02 | P04 | P05 | P06 | P07 | P09 | P10 | P11 | [+]Distance | [-]Distance |    Score | Ranking |
 |:----------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:-----------:|------------:|---------:|:-------:|
@@ -56,7 +56,7 @@ Existem duas formas de executar o aplicativo:
 | **G**      |   3 |   1 |   2 |   0 |   1 |   1 |   0 |   2 |   3 |    0.127098 |    0.123696 | 0.493218 |   **5** |
 | **H**      |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    0.202785 |         0.0 |      0.0 |   **8** |
 
-> Formato de saída ordenada adicionando o comando `-o, --[no-]ordenar`
+### Formato de saída ordenada adicionando o comando `-o, --[no-]ordenar`
 
 | Provedores | P01 | P02 | P04 | P05 | P06 | P07 | P09 | P10 | P11 | [+]Distance | [-]Distance |    Score | Ranking |
 |:----------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:-----------:|------------:|---------:|:-------:|
@@ -69,7 +69,7 @@ Existem duas formas de executar o aplicativo:
 | **A**      |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    0.202785 |         0.0 |      0.0 |   **7** |
 | **H**      |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    0.202785 |         0.0 |      0.0 |   **8** |
 
-> Exibir os dados normalizados adicionando o comando `-n, --[no-]normalizar`
+### Exibir os dados normalizados adicionando o comando `-n, --[no-]normalizar`
 
 | Provedores | P01      | P02      | P04      | P05      | P06      | P07      | P09      | P10      | P11      |
 |:----------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
