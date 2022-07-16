@@ -85,6 +85,5 @@ Existem duas formas de executar o aplicativo:
 | **H**      | 0.028868 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
 
 ## Licença
-© 2022 Deriks Karlay
 
 Este repositório está licenciado sob a licença MIT. Consulte [LICENSE](LICENSE.md) para obter detalhes.
