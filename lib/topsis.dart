@@ -29,7 +29,7 @@ class Topsis {
     // Lê o arquivo csv
     final csv = file.readAsStringSync();
     // Monta a tabela para ser processada
-    _mountTable(CsvToListConverter().convert(csv));
+    _mountTable(CsvToListConverter().convert(csv, eol: '\n'));
     // Executa o processamento dos dados
     _process();
   }
